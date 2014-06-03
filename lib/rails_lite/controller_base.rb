@@ -41,8 +41,7 @@ class ControllerBase
   # use ERB and binding to evaluate templates
   # pass the rendered html to render_content
   def render(template_name)
-    # FIXME: We don't strip _controller because the specs won't pass.
-    controller_name = self.class.name.underscore #.gsub(/_controller$/,'')
+    controller_name = self.class.name.underscore.gsub(/_controller$/,'')
     filename = "views/#{controller_name}/#{template_name}.html.erb"
     erb_data = File.read(filename)
 
