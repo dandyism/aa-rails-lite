@@ -21,6 +21,8 @@ class ControllerBase
     raise RuntimeError if already_built_response?
 
     res.body, res.content_type = content, type
+    session.store_session(res)
+
     response_built!
   end
 
@@ -35,6 +37,8 @@ class ControllerBase
 
     res['location'] = url.to_s
     res.status = 302
+    session.store_session(res)
+
     response_built!
   end
 

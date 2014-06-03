@@ -8,15 +8,15 @@ class Session
   # find the cookie for this app
   # deserialize the cookie into a hash
   def initialize(req)
-    cookie = get_app_cookie(req)
+    @cookie = get_app_cookie(req)
   end
 
   def [](key)
-    cookie[key]
+    @cookie[key]
   end
 
   def []=(key, val)
-    cookie[key] = val
+    @cookie[key] = val
   end
 
   # serialize the hash into json and save in a cookie
@@ -26,14 +26,14 @@ class Session
   end
 
   private
-  attr_accessor :cookie
 
   def get_app_cookie(req)
-    cookie = req.cookies.find { |cookie| cookie.name = COOKIE_NAME }
-    cookie.nil? ? {} : JSON::parse(cookie.value)
+    new_cookie = req.cookies.find { |c| c.to_s.match(/#{COOKIE_NAME}/) }
+    cookie_hash = new_cookie.nil? ? '{}' : new_cookie.value
+    cookie_hash == "null" ? {} : JSON::parse(cookie_hash)
   end
 
   def new_app_cookie
-    WEBrick::Cookie.new(COOKIE_NAME, self.cookie.to_json)
+    WEBrick::Cookie.new(COOKIE_NAME, @cookie.to_json)
   end
 end
