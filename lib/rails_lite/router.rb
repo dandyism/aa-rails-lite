@@ -8,7 +8,7 @@ class Route
 
   # checks if pattern matches path and method matches request method
   def matches?(req)
-    pattern.match(req.host) && http_method == req.request_method.downcase.to_sym
+    /#{pattern}/.match(req.path) && http_method == req.request_method.downcase.to_sym
   end
 
   # use pattern to pull out route params (save for later?)

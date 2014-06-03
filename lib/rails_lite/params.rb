@@ -7,6 +7,7 @@ class Params
   # 3. route params
   def initialize(req, route_params = {})
     @params = route_params
+    @permitted = []
 
     parse_www_encoded_form(req.query_string) if req.query_string
     parse_www_encoded_form(req.body) if req.body
@@ -17,12 +18,17 @@ class Params
   end
 
   def permit(*keys)
+    @permitted += keys
   end
 
   def require(key)
+    raise AttributeNotFoundError unless @params.has_key?(key)
+
+    @params[key]
   end
 
   def permitted?(key)
+    @permitted.include?(key)
   end
 
   def to_s
