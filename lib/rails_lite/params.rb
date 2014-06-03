@@ -8,6 +8,7 @@ class Params
   def initialize(req, route_params = {})
     @params = {}
     parse_www_encoded_form(req.query_string) if req.query_string
+    parse_www_encoded_form(req.body) if req.body
   end
 
   def [](key)
@@ -41,8 +42,7 @@ class Params
       nest_keys(p.first,p.last)
     end
 
-    @params = pairs.reduce({}) { |m, p| m.merge(p)}
-    p @params
+    @params = pairs.reduce(@params) { |m, p| m.merge(p)}
   end
 
   def nest_keys(keys, value)
