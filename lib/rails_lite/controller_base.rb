@@ -67,7 +67,7 @@ class ControllerBase
     render(name.to_s) unless already_built_response?
   end
 
-  private
+  protected
   attr_writer :params, :req, :res
 
   def response_built!

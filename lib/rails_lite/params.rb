@@ -53,7 +53,11 @@ class Params
   end
 
   def nest_keys(keys, value)
-    keys.count == 1 ? { keys.first => value } : { keys.shift => nest_keys(keys, value) }
+    if keys.count == 1
+      { keys.first.to_sym => value }
+    else
+      { keys.shift => nest_keys(keys, value) }
+    end
   end
 
   # this should return an array

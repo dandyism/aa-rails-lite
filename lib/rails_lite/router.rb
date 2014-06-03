@@ -8,13 +8,14 @@ class Route
 
   # checks if pattern matches path and method matches request method
   def matches?(req)
-    /#{pattern}/.match(req.path) && http_method == req.request_method.downcase.to_sym
+    pattern.match(req.path) && http_method == req.request_method.downcase.to_sym
   end
 
   # use pattern to pull out route params (save for later?)
   # instantiate controller and call controller action
   def run(req, res)
     route_params = extract_route_params(req)
+    p route_params
     controller = controller_class.new(req, res, route_params)
     controller.invoke_action(action_name)
   end
@@ -22,7 +23,9 @@ class Route
   private
   def extract_route_params(req)
     match_data = pattern.match(req.path)
-    match_data.names.zip(match_data.captures).to_h
+    keys = match_data.names.map(&:to_sym)
+    values = match_data.captures
+    keys.zip(values).to_h
   end
 end
 
