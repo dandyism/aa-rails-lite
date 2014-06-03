@@ -6,9 +6,11 @@ class Params
   # 2. post body
   # 3. route params
   def initialize(req, route_params = {})
+    parse_www_encoded_form(req.query_string)
   end
 
   def [](key)
+    @params[key]
   end
 
   def permit(*keys)
@@ -32,6 +34,8 @@ class Params
   # should return
   # { "user" => { "address" => { "street" => "main", "zip" => "89436" } } }
   def parse_www_encoded_form(www_encoded_form)
+    pairs = URI::decode_www_form(www_encoded_form)
+    @params = Hash[pairs]
   end
 
   # this should return an array
