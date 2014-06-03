@@ -2,10 +2,13 @@ class Route
   attr_reader :pattern, :http_method, :controller_class, :action_name
 
   def initialize(pattern, http_method, controller_class, action_name)
+    self.pattern, self.http_method, self.controller_class, self.action_name =
+      pattern, http_method, controller_class, action_name
   end
 
   # checks if pattern matches path and method matches request method
   def matches?(req)
+    pattern.match(req.host) && http_method == req.request_method.downcase.to_sym
   end
 
   # use pattern to pull out route params (save for later?)
