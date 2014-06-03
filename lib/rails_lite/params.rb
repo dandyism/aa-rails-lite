@@ -6,7 +6,7 @@ class Params
   # 2. post body
   # 3. route params
   def initialize(req, route_params = {})
-    parse_www_encoded_form(req.query_string)
+    parse_www_encoded_form(req.query_string) if req.query_string
   end
 
   def [](key)
@@ -35,11 +35,22 @@ class Params
   # { "user" => { "address" => { "street" => "main", "zip" => "89436" } } }
   def parse_www_encoded_form(www_encoded_form)
     pairs = URI::decode_www_form(www_encoded_form)
-    @params = Hash[pairs]
+    pairs.map! do |p|
+      p[0] = parse_key(p[0])
+      nest_keys(p.first,p.last)
+    end
+
+    @params = pairs.reduce({}) { |m, p| m.merge(p)}
+    p @params
+  end
+
+  def nest_keys(keys, value)
+    keys.count == 1 ? { keys.first => value } : { keys.shift => nest_keys(keys, value) }
   end
 
   # this should return an array
   # user[address][street] should return ['user', 'address', 'street']
   def parse_key(key)
+    key.split(/\]\[|\[|\]/)
   end
 end
