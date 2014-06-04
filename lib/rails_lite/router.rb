@@ -15,7 +15,6 @@ class Route
   # instantiate controller and call controller action
   def run(req, res)
     route_params = extract_route_params(req)
-    p route_params
     controller = controller_class.new(req, res, route_params)
     controller.invoke_action(action_name)
   end
