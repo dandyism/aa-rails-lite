@@ -1,4 +1,5 @@
 require 'uri'
+require_relative '../rails_lite'
 
 class Params
   # use your initialize to merge params from

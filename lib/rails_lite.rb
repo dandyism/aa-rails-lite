@@ -1,2 +1,5 @@
+require_relative 'rails_lite/object'
 require_relative 'rails_lite/controller_base'
 require_relative 'rails_lite/router'
+require_relative 'rails_lite/params'
+require_relative 'rails_lite/session'

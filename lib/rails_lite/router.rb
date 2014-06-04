@@ -1,3 +1,5 @@
+require_relative '../rails_lite'
+
 class Route
   attr_reader :pattern, :http_method, :controller_class, :action_name
 
@@ -8,7 +10,7 @@ class Route
 
   # checks if pattern matches path and method matches request method
   def matches?(req)
-    pattern.match(req.path) && http_method == req.request_method.downcase.to_sym
+    pattern.try(:match, req.path) && http_method == req.request_method.downcase.to_sym
   end
 
   # use pattern to pull out route params (save for later?)

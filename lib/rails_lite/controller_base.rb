@@ -1,8 +1,6 @@
 require 'erb'
 require 'active_support/inflector'
-require_relative 'params'
-require_relative 'session'
-
+require_relative '../rails_lite'
 
 class ControllerBase
   attr_reader :params, :req, :res

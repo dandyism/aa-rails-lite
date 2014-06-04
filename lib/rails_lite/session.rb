@@ -1,5 +1,6 @@
 require 'json'
 require 'webrick'
+require_relative '../rails_lite'
 
 class Session
 
