@@ -46,18 +46,26 @@ class Params
     pairs = URI::decode_www_form(www_encoded_form)
     pairs.map! do |p|
       p[0] = parse_key(p[0])
-      nest_keys(p.first,p.last)
+      [p.first, p.last]
     end
 
-    @params = pairs.reduce(@params) { |m, p| m.merge(p)}
+    @params = build_hash(pairs)
   end
 
-  def nest_keys(keys, value)
-    if keys.count == 1
-      { keys.first.to_sym => value }
-    else
-      { keys.shift => nest_keys(keys, value) }
+  def build_hash(pairs)
+    hash = Hash.new
+
+    pairs.each do |pair|
+      subhash = hash
+      keys = pair.first.is_a?(Array) ? pair.first : [pair.first]
+      keys[0...-1].each do |key|
+        subhash[key] ||= Hash.new
+        subhash = subhash[key]
+      end
+      subhash[keys.last] = pair.last
     end
+
+    hash
   end
 
   # this should return an array
