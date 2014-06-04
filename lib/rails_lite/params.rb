@@ -50,7 +50,7 @@ class Params
       [p.first, p.last]
     end
 
-    @params = build_hash(pairs)
+    @params.merge! build_hash(pairs)
   end
 
   def build_hash(pairs)
